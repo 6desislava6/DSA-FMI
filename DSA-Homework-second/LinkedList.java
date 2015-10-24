@@ -177,12 +177,30 @@ public class LinkedList {
 		return resulting;
 		
 	}
+	
+	// didn't understand it exactly, yet...
+	void splice(LinkedList other, Node start, Node end){
+		start.right = other.head;
+		other.head.left = start;
+		end.left = other.tail;
+		other.tail.right = end;
+		// what else?
+	}
+	public LinkedList splitAt(Node node){
+		LinkedList remainingList = new LinkedList();
+		remainingList.head = node;
+		remainingList.tail = this.tail;
+		this.tail = node.left;
+		node.left.right = null;
+		node.left = null;
+		return remainingList;
+	}
 	public static void main(String[] args) {
 		LinkedList list = new LinkedList();
 		list.append(1);
 		list.append(10);
 		list.append(10);		
-		list.append(1);
+		list.append(5);
 		list.append(1);
 		list.append(7);
 		list.append(7);
@@ -191,6 +209,13 @@ public class LinkedList {
 		System.out.println(list);
 		LinkedList noDuplicate = list.removeDuplicates();
 		System.out.println(noDuplicate);
+		Node splittingPoint = list.get(3);
+		System.out.println(splittingPoint.value);
+		System.out.println(list);
+		LinkedList splitted = list.splitAt(splittingPoint);
+		System.out.println("*************");
+		System.err.println(list);
+		System.out.println(splitted);
 	}
 
 }
