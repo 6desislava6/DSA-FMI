@@ -44,7 +44,7 @@ public class LinkedList {
 		while (current != null && current.value != value) {
 			current = current.right;
 		}
-		return current.value == value ? current : null;
+		return current;
 
 	}
 
@@ -193,6 +193,7 @@ public class LinkedList {
 		this.tail = node.left;
 		node.left.right = null;
 		node.left = null;
+		//return remainingList;
 		return remainingList;
 	}
 	public static void main(String[] args) {
