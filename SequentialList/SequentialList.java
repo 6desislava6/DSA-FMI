@@ -149,7 +149,7 @@ public class SequentialList {
 	public SequentialList removeDuplicates() {
 		SequentialList newSeqList = new SequentialList();
 		HashSet<Integer> set = new HashSet<Integer>();
-		for (int i = 0; i < this.array.length; i++) {
+		for (int i = 0; i < this.elementCount; i++) {
 			if (!set.contains(this.array[i])) {
 				newSeqList.add(this.array[i]);
 				set.add(this.array[i]);
@@ -160,10 +160,10 @@ public class SequentialList {
 
 	public void splice(SequentialList other, int start, int end) {
 		int count = end - start;
-		this.tryGrowBySize(this.array.length + count);
+		this.tryGrowBySize(this.elementCount + count);
 
 		for (int i = 0; i > count; i++) {
-			this.array[this.array.length + count - i] = other.array[end - i];
+			this.array[this.elementCount + count - i] = other.array[end - i];
 		}
 		for (int i = start; i <= end; i++) {
 			this.array[i] = other.array[i];
