@@ -12,8 +12,8 @@ void swap(int numbers[][3], int i, int j)
     numbers[j][1] = temp[1];
     numbers[j][2] = temp[2];
 }
-int convertTime(int time[3]){
-    return time[0] * 3600 + time[1] * 60 + time[2];
+long long convertTime(int time[3]){
+    return time[0] * 60 * 100 + time[1] * 100 + time[2];
 }
 void bubbleSort(int numbers[][3], int count)
 {
@@ -24,6 +24,30 @@ void bubbleSort(int numbers[][3], int count)
            if (convertTime(numbers[j]) > convertTime(numbers[j + 1]))
               swap(numbers, j, j + 1);
     return;
+}
+void insertionSort(int numbers[][3], int count)
+{
+   int i, j, key3[3];
+   long long key;
+   for (i = 1; i < count; i++)
+   {
+        key3[0] = numbers[i][0];
+        key3[1] = numbers[i][1];
+        key3[2] = numbers[i][2];
+        key = convertTime(numbers[i]);
+        j = i-1;
+
+        while (j >= 0 && convertTime(numbers[j]) > key)
+        {
+           numbers[j+1][0] = numbers[j][0];
+           numbers[j+1][1] = numbers[j][1];
+           numbers[j+1][2] = numbers[j][2];
+           j = j-1;
+        }
+        numbers[j+1][0] = key3[0];
+        numbers[j+1][1] = key3[1];
+        numbers[j+1][2] = key3[2];
+   }
 }
 
 
@@ -59,7 +83,7 @@ int main() {
         std :: cin >> names[i];
         scanf(" %d:%d.%d", &times[i][0], &times[i][1], &times[i][2]);
         int time[3] = {times[i][0], times[i][1], times[i][2]};
-        bubbleSort(times, ++currentCount);
+        insertionSort(times, ++currentCount);
         namesPlaces.insert (std::make_pair<std::string, int>(names[i], findPlace(times, time, currentCount)));
     }
     for(int i = 0; i < count; i++)
