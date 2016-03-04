@@ -1,0 +1,26 @@
+// parent (i - 1) / 2
+// left 2 i + 1
+// right 2 i + 2
+/*
+* The MAX-HEAPIFY procedure, which runs in O.lg n/ time, is the key to main-
+taining the max-heap property.
+* The BUILD -MAX-HEAP procedure, which runs in linear time, produces a max-
+heap from an unordered input array.
+* The HEAPSORT procedure, which runs in O.n lg n/ time, sorts an array in
+place.
+* The MAX-HEAP-INSERT , HEAP-EXTRACT-MAX , HEAP-INCREASE-KEY ,
+and HEAP-MAXIMUM procedures, which run in O.lg n/ time, allow the heap
+data structure to implement a priority queue.*/
+
+/*Algorithm 1 MaxHeap-Insert(A, key)
+
+    heap-size[A] ← heap-size[A] + 1
+    i ← heap-size[A] - 1
+    while i > 0 and A[Parent(i)] < key
+
+        do A[i] ← A[Parent(i)]
+
+            i ← Parent(i)
+
+A[i] ← key*/
+
