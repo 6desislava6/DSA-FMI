@@ -1,99 +1,107 @@
-#include <iostream>
-#include <math.h>
+#include <stdio.h>
 
-void swap(int* heap, int first, int second)
+class Heap
 {
-    int swap = heap[first];
-    heap[first] = heap[second];
-    heap[second] = swap;
 
-}
-int getParent(int i)
-{
-    return (i - 1) / 2;
-}
-int getLeft(int i)
-{
-    return 2 * i + 1;
-}
-int getRight(int i)
-{
-    return 2 * i + 2;
-}
-// ,     max-heap-!
-void maxHeapify(int* heap, int index, short count)
-{
-    int largest = index;
-    int left = getLeft(index), right = getRight(index);
-    if (left < count && heap[left] > heap[largest])
-        largest = left;
-    if (right < count && heap[right] > heap[largest])
-        largest = right;
-
-    if (largest != index)
+public:
+    int count;
+    int* heap;
+    Heap()
     {
-        swap(heap, index, largest);
-        maxHeapify(heap, largest, count);
+        this->heap = new int[1 << 20];
+        this->count = 0;
     }
-}
 
-int removeBiggest(int* heap, short& count)
-{
-    int biggest = heap[0];
-    count--;
-    heap[0] = heap[count];
-    maxHeapify(heap, 0, count);
-    return biggest;
-}
-void insert(int* heap, short& count, int value)
-{
-    int index = count;
-    count++;
-    while (index > 0 && heap[getParent(index)] < value)
+    inline void swap(int first, int second)
     {
-        heap[index] = heap[getParent(index)];
-        index = getParent(index);
+        int swap = heap[first];
+        heap[first] = heap[second];
+        heap[second] = swap;
+
     }
-    heap[index] = value;
-}
-void printHeap(int* heap, short count)
-{
-    for(int i = 0; i < count; i++)
+    inline int getParent(int i)
     {
-        std :: cout << "***" << heap[i] << "\n";
+        return (i - 1) / 2;
     }
-}
+    inline int getLeft(int i)
+    {
+        return 2 * i + 1;
+    }
+    inline int getRight(int i)
+    {
+        return 2 * i + 2;
+    }
+    // ,     max-heap-!
+    inline void maxHeapify(int index)
+    {
+        int largest = index;
+        int left = getLeft(index), right = getRight(index);
+        if (left < count && heap[left] > heap[largest])
+            largest = left;
+        if (right < count && heap[right] > heap[largest])
+            largest = right;
+
+        if (largest != index)
+        {
+            this->swap(index, largest);
+            maxHeapify(largest);
+        }
+    }
+
+
+    inline int removeBiggest()
+    {
+        int biggest = heap[0];
+        count--;
+        heap[0] = heap[count];
+        maxHeapify(0);
+        return biggest;
+    }
+    void insert(int value)
+    {
+        int index = count;
+        count++;
+        while (index > 0 && heap[getParent(index)] < value)
+        {
+            heap[index] = heap[getParent(index)];
+            index = getParent(index);
+        }
+        heap[index] = value;
+    }
+
+
+};
 
 int main()
 {
     int number;
-    short count = 0;
+    Heap* heap = new Heap();
     char operation = 'A';
-    int* heap = new int[1 << 20];
+
     while(operation != 'Q')
     {
-        std :: cin >> operation;
+        scanf("%c", &operation);
         if (operation == 'A')
         {
-            std :: cin >> number;
-            insert(heap, count, number);
+            scanf(" %d", &number);
+            heap->insert(number);
         } else if (operation == 'R')
         {
-            if(count == 0)
+            if(heap->count == 0)
             {
-                std :: cout << "Not available";
+                printf("Not available\n");
                 continue;
             }
-            std :: cout << removeBiggest(heap, count) << "\n";
+            printf("%d\n", heap->removeBiggest());
 
         } else if (operation == 'L')
         {
-            if(count == 0)
+            if(heap->count == 0)
             {
-                std :: cout << "Not available";
+                printf("Not available\n");
                 continue;
             }
-            std :: cout << heap[0] << "\n";
+            printf("%d\n", heap->heap[0]);
         }
         //printHeap(heap, count);
     }

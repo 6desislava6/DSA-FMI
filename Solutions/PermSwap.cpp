@@ -1,68 +1,95 @@
-#include <iostream>
 #include <math.h>
+#include <stdio.h>
 
-unsigned long long merge(int numbers[], int left, int right, int mid)
+
+void swap(int heap[], int first, int second)
 {
-    int n1 = mid - left + 1, n2 = right - mid;
+    int swap = heap[first];
+    heap[first] = heap[second];
+    heap[second] = swap;
 
-    unsigned long long inversionsCounter = 0;
-    int firstArr[n1];
-    int secondArr[n2];
-    for(int i = 0; i < n1; i++)
-        firstArr[i] = numbers[left + i];
-    for(int i = 0; i < n2; i++)
-        secondArr[i] = numbers[mid + 1 + i];
-
-    int i = 0, j = 0, k = left;
-    while (i < n1 && j < n2)
-    {
-        if(firstArr[i] <= secondArr[j])
-        {
-            numbers[k++] = firstArr[i++];
-        } else
-        {
-            numbers[k++] = secondArr[j++];
-            inversionsCounter += mid  - (left + i) + 1;
-        }
-
-    }
-   while (i < n1)
-        numbers[k++] = firstArr[i++];
-
-    while (j < n2)
-        numbers[k++] = secondArr[j++];
-
-
-    return inversionsCounter;
 }
-
-unsigned long long mergeSort(int numbers[], int left, int right)
+int getParent(int i)
 {
-
-    if (right <= left)
-        return 0;
-    int mid = left +(right - left) / 2;
-    unsigned long long inversionsCounter = mergeSort(numbers, left, mid);
-    inversionsCounter += mergeSort(numbers, mid + 1, right);
-    inversionsCounter += merge(numbers, left, right, mid);
-    return inversionsCounter;
+    return (i - 1) / 2;
 }
-void printArr(int* arr, int count)
+int getLeft(int i)
 {
-    for(int i = 0; i < count; i++)
+    return 2 * i + 1;
+}
+int getRight(int i)
+{
+    return 2 * i + 2;
+}
+// ,     max-heap-!
+void maxHeapify(int heap[], int index, short count)
+{
+    int largest = index;
+    int left = getLeft(index), right = getRight(index);
+    if (left < count && heap[left] > heap[largest])
+        largest = left;
+    if (right < count && heap[right] > heap[largest])
+        largest = right;
+
+    if (largest != index)
     {
-        std :: cout << "***" << arr[i] << "\n";
+        swap(heap, index, largest);
+        maxHeapify(heap, largest, count);
     }
 }
+
+int removeBiggest(int heap[], short& count)
+{
+    int biggest = heap[0];
+    count--;
+    heap[0] = heap[count];
+    maxHeapify(heap, 0, count);
+    return biggest;
+}
+void insert(int heap[], short& count, int value)
+{
+    int index = count;
+    count++;
+    while (index > 0 && heap[getParent(index)] < value)
+    {
+        heap[index] = heap[getParent(index)];
+        index = getParent(index);
+    }
+    heap[index] = value;
+}
+
 int main()
 {
-    int count;
-    std :: cin >> count;
-    int numbers[count];
-    for (int i = 0; i < count; i++)
-        std :: cin >> numbers[i];
+    int number;
+    short count = 0;
+    char operation = 'A';
+    int* heap = new int[1 << 18];
+    while(operation != 'Q')
+    {
+        scanf("%c", &operation);
+        if (operation == 'A')
+        {
+            scanf("%c", &operation);
+            scanf(" %d", &number);
+            insert(heap, count, number);
+        } else if (operation == 'R')
+        {
+            if(count == 0)
+            {
+                printf("Not available\n");
+                continue;
+            }
+            printf("%d\n", removeBiggest(heap, count));
 
-    std :: cout << mergeSort(numbers, 0, count - 1);
-    //printArr(numbers, count);
-
+        } else if (operation == 'L')
+        {
+            if(count == 0)
+            {
+                printf("Not available\n");
+                continue;
+            }
+            printf("%d\n", heap[0]);
+        }
+        //printHeap(heap, count);
+    }
 }
